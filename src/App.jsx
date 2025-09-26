@@ -2,9 +2,11 @@ import { useState } from 'react'
 import ItemInput from './components/ItemInput';
 import './App.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import EditingItemPopup from './components/editingItemPopup';
 
 function App() {
   const [items, setItems] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   function handleAddItem(newItem) {
     setItems((prevItems) => [...prevItems, newItem]);
@@ -14,14 +16,14 @@ function App() {
     setItems((prevItems) => prevItems.filter((_, i) => i !== index));
   }
 
-  function handleEditItem(index) {
-    const newValue = prompt("Edit item:", items[index]); 
-    if (newValue !== null && newValue.trim() !== "") {
-      setItems((prevItems) =>
-        prevItems.map((item, i) => (i === index ? newValue : item))
-      );
-    }
-  }
+  // function handleEditItem(index) {
+  //   const newValue = prompt("Edit item:", items[index]); 
+  //   if (newValue !== null && newValue.trim() !== "") {
+  //     setItems((prevItems) =>
+  //       prevItems.map((item, i) => (i === index ? newValue : item))
+  //     );
+  //   }
+  // }
 
   return (
     <div className="container">
@@ -34,7 +36,8 @@ function App() {
             <div>
               <button 
                 className="btn btn-sm btn-outline-primary me-2"
-                onClick={() => handleEditItem(index)} 
+                // onClick={() => handleEditItem(index)} 
+                onClick={() => setShowModal(true)}
               >
                 <i className="bi bi-pencil"></i>
               </button>
@@ -48,6 +51,12 @@ function App() {
           </li>
         ))}
       </ul>
+      {showModal && (
+        <EditingItemPopup onClose={() => setShowModal(false)}>
+          <h2>Edit Item</h2>
+          <input type="text" className="form-control" placeholder="Edit..." />
+        </EditingItemPopup>
+      )}
     </div>
   )
 }
